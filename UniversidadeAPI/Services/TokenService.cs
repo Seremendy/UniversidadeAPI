@@ -30,7 +30,7 @@ namespace UniversidadeAPI.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var now = DateTime.UtcNow;
-            var expires = now.AddHours(2);
+            var expires = now.AddHours(1);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

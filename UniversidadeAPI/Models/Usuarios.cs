@@ -12,12 +12,11 @@ namespace UniversidadeAPI.Models
     public class Usuarios
     {
         public int UsuarioID { get; set; }
-
         public string Login { get; set; } = string.Empty;
+        public Role Role { get; set; } 
 
-        [JsonIgnore]
+
+        [JsonIgnore] 
         public string SenhaHash { get; set; } = string.Empty;
-
-        public Role Role { get; set; }
     }
 }

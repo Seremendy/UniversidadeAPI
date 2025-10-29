@@ -22,8 +22,7 @@ namespace UniversidadeAPI
             // Adiciona o suporte aos Controladores
             builder.Services.AddControllers();
 
-            // Registra o serviço de conexão MySQL (Singleton)
-            builder.Services.AddSingleton<IDbConnection>(provider =>
+            builder.Services.AddScoped<IDbConnection>(provider =>
             {
                 return new MySqlConnection(connectionString);
             });
@@ -32,7 +31,6 @@ namespace UniversidadeAPI
             builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
-            
 
 
             // --- 3. CONFIGURAÇÃO DO SWAGGER/OPENAPI ---
