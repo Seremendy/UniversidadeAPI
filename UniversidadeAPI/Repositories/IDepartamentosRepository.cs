@@ -1,4 +1,4 @@
-﻿using UniversidadeAPI.Models;
+﻿using UniversidadeAPI.Entities;
 
 namespace UniversidadeAPI.Repositories
 {

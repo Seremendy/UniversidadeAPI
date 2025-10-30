@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using UniversidadeAPI.Models;
+using UniversidadeAPI.Entities;
 
 namespace UniversidadeAPI.Services
 {
@@ -16,7 +16,7 @@ namespace UniversidadeAPI.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(Usuarios usuario)
+        public string GenerateToken(Usuario usuario)
         {
             var claims = new List<Claim>
             {

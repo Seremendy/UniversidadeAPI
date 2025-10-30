@@ -27,10 +27,20 @@ namespace UniversidadeAPI
                 return new MySqlConnection(connectionString);
             });
 
-            // Registra o Repositório de Departamentos (Scoped)
+
             builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
+            builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
+            builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
+            builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+            builder.Services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
+            builder.Services.AddScoped<ISalaDeAulaRepository, SalaDeAulaRepository>();
+            builder.Services.AddScoped<IHorarioRepository, HorarioRepository>();
+            builder.Services.AddScoped<ITurmaRepository, TurmaRepository>();
+            builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
+            builder.Services.AddScoped<INotaRepository, NotaRepository>();
+            builder.Services.AddScoped<IPrerequisitoRepository, PrerequisitoRepository>();
 
 
             // --- 3. CONFIGURAÇÃO DO SWAGGER/OPENAPI ---

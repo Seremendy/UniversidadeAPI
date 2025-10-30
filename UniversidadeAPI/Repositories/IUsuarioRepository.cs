@@ -1,10 +1,10 @@
-﻿using UniversidadeAPI.Models;
+﻿using UniversidadeAPI.Entities;
 
 namespace UniversidadeAPI.Repositories
 {
     public interface IUsuarioRepository
     {
-        Task<Usuarios?> GetByLoginAsync(string login);
-        Task<int> AddAsync(Usuarios usuario);
+        Task<Usuario?> GetByLoginAsync(string login);
+        Task<int> AddAsync(Usuario usuario);
     }
 }

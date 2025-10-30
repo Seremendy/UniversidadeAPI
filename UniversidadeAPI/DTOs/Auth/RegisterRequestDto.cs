@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UniversidadeAPI.Models
+namespace UniversidadeAPI.DTOs.Auth
 {
-    public class RegisterRequestModel
+    public class RegisterRequestDto
     {
         [Required(ErrorMessage = "O Login é obrigatório.")]
         [MinLength(8, ErrorMessage = "A Login deve ter no mínimo 8 caracteres.")]

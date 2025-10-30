@@ -1,9 +1,10 @@
 ﻿using BCrypt.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UniversidadeAPI.Models;
+using UniversidadeAPI.Entities;
 using UniversidadeAPI.Repositories;
 using UniversidadeAPI.Services;
+using UniversidadeAPI.DTOs.Auth;
 
 [Authorize]
 [ApiController]
@@ -22,11 +23,11 @@ public class AuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] LoginRequestModel model)
+    public async Task<ActionResult> Login([FromBody] LoginRequestDto dto)
     {
-        var usuario = await _usuarioRepository.GetByLoginAsync(model.Login);
+        var usuario = await _usuarioRepository.GetByLoginAsync(dto.Login);
 
-        if (usuario == null || !BCrypt.Net.BCrypt.Verify(model.Senha, usuario.SenhaHash))
+        if (usuario == null || !BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
         {
             return Unauthorized(new { Message = "Login ou senha inválidos." });
         }
@@ -38,23 +39,23 @@ public class AuthController : ControllerBase
 
     [HttpPost("register")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> Register([FromBody] RegisterRequestModel model)
+    public async Task<ActionResult> Register([FromBody] RegisterRequestDto dto)
     {
-        if (!Enum.TryParse(model.Role, true, out Role role))
+        if (!Enum.TryParse(dto.Role, true, out Role role))
         {
             return BadRequest(new { Message = "Role inválida. Use Admin, Professor ou Aluno." });
         }
 
-        if (await _usuarioRepository.GetByLoginAsync(model.Login) != null)
+        if (await _usuarioRepository.GetByLoginAsync(dto.Login) != null)
         {
             return Conflict(new { Message = "Login já existe." });
         }
 
        
-        var usuario = new Usuarios
+        var usuario = new Usuario
         {
-            Login = model.Login,
-            SenhaHash = BCrypt.Net.BCrypt.HashPassword(model.Senha),
+            Login = dto.Login,
+            SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha),
             Role = role
         };
         
@@ -63,7 +64,7 @@ public class AuthController : ControllerBase
         usuario.UsuarioID = novoId;
 
      
-        var responseDto = new UsuarioResponseModel
+        var responseDto = new UsuarioResponseDto
         {
             UsuarioID = usuario.UsuarioID,
             Login = usuario.Login,

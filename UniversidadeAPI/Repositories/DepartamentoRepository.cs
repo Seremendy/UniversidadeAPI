@@ -1,7 +1,7 @@
-﻿using Dapper; // Necessário para usar os métodos do Dapper
-using MySqlConnector; // Necessário para usar o tipo de conexão MySQL
+﻿using Dapper; 
+using MySqlConnector; 
 using System.Data;
-using UniversidadeAPI.Models;
+using UniversidadeAPI.Entities;
 
 namespace UniversidadeAPI.Repositories
 {
@@ -14,10 +14,11 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<Departamento> GetByIdAsync(int id)
+        public async Task<Departamento?> GetByIdAsync(int id)
         {
             var sql = "SELECT DepartamentoID, DepartamentoNome FROM Departamentos WHERE DepartamentoID = @Id";
             return await _dbConnection.QuerySingleOrDefaultAsync<Departamento>(sql, new { Id = id });
+
         }
 
         public async Task<int> AddAsync(Departamento departamento)

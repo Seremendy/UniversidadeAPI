@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UniversidadeAPI.Models
+namespace UniversidadeAPI.DTOs.Auth
 {
-    public class LoginRequestModel
+    public class LoginRequestDto
     {
         [Required(ErrorMessage = "O Login é obrigatório.")]
         public string Login { get; set; }

@@ -1,6 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace UniversidadeAPI.Models
+namespace UniversidadeAPI.Entities
 {
     public enum Role
     { 
@@ -9,10 +10,15 @@ namespace UniversidadeAPI.Models
         Aluno
     }
 
-    public class Usuarios
+    public class Usuario
     {
         public int UsuarioID { get; set; }
+
+        [Required]
+        [StringLength(100)]
         public string Login { get; set; } = string.Empty;
+
+        [Required]
         public Role Role { get; set; } 
 
 
