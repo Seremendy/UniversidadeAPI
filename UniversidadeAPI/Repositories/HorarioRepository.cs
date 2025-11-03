@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 using UniversidadeAPI.Entities;
-using UniversidadeAPI.Repositories;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
@@ -28,13 +28,12 @@ namespace UniversidadeAPI.Repositories
         public async Task<int> AddAsync(Horario entity)
         {
             var sql = @"
-                INSERT INTO Horarios (DisciplinaID, DiaSemana, HoraInicio, HoraFim)
-                VALUES (@DisciplinaID, @DiaSemana, @HoraInicio, @HoraFim);
+                INSERT INTO Horarios (DiaSemana, HoraInicio, HoraFim)
+                VALUES (@DiaSemana, @HoraInicio, @HoraFim);
                 SELECT LAST_INSERT_ID();";
 
             return await _dbConnection.ExecuteScalarAsync<int>(sql, new
             {
-                entity.DisciplinaID,
                 DiaSemana = entity.DiaSemana.ToString(),
                 entity.HoraInicio,
                 entity.HoraFim
@@ -45,7 +44,6 @@ namespace UniversidadeAPI.Repositories
         {
             var sql = @"
                 UPDATE Horarios SET
-                    DisciplinaID = @DisciplinaID,
                     DiaSemana = @DiaSemana,
                     HoraInicio = @HoraInicio,
                     HoraFim = @HoraFim
@@ -53,7 +51,6 @@ namespace UniversidadeAPI.Repositories
 
             var rowsAffected = await _dbConnection.ExecuteAsync(sql, new
             {
-                entity.DisciplinaID,
                 DiaSemana = entity.DiaSemana.ToString(),
                 entity.HoraInicio,
                 entity.HoraFim,

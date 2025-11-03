@@ -5,7 +5,7 @@ namespace UniversidadeAPI.Entities
     public class Curso
     {
 
-        public int CursosID { get; set; }
+        public int CursoID { get; set; }
 
         [Required]
         [StringLength(100)]

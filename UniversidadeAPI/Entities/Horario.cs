@@ -15,9 +15,6 @@ namespace UniversidadeAPI.Entities
         public int HorarioID { get; set; }
 
         [Required]
-        public int DisciplinaID { get; set; }
-
-        [Required]
         public DiaSemana DiaSemana { get; set; }
 
         [Required]

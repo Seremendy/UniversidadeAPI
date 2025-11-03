@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 using UniversidadeAPI.Entities;
-using UniversidadeAPI.Repositories;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
@@ -56,6 +56,12 @@ namespace UniversidadeAPI.Repositories
             var sql = "DELETE FROM Turmas WHERE TurmaID = @Id";
             var rowsAffected = await _dbConnection.ExecuteAsync(sql, new { Id = id });
             return rowsAffected > 0;
+        }
+
+        public async Task<IEnumerable<Turma>> GetTurmasBySalaIdAsync(int salaDeAulaId)
+        {
+            var sql = "SELECT * FROM Turmas WHERE SalaDeAulaID = @SalaDeAulaId";
+            return await _dbConnection.QueryAsync<Turma>(sql, new { SalaDeAulaId = salaDeAulaId });
         }
     }
 }

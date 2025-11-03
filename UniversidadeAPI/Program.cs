@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UniversidadeAPI.Services;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI
 {
@@ -14,7 +15,7 @@ namespace UniversidadeAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // --- 1. CONFIGURAÇÃO DA CONEXÃO DB ---
+            // --- CONFIGURAÇÃO DA CONEXÃO DB ---
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("A string de conexão 'DefaultConnection' não foi encontrada.");
 
@@ -41,9 +42,10 @@ namespace UniversidadeAPI
             builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
             builder.Services.AddScoped<INotaRepository, NotaRepository>();
             builder.Services.AddScoped<IPrerequisitoRepository, PrerequisitoRepository>();
+            builder.Services.AddScoped<IGradeCurricularRepository, GradeCurricularRepository>();
 
 
-            // --- 3. CONFIGURAÇÃO DO SWAGGER/OPENAPI ---
+            // --- CONFIGURAÇÃO DO SWAGGER/OPENAPI ---
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -75,7 +77,7 @@ namespace UniversidadeAPI
                 });
             });
 
-            // 4. Configuração do JWT
+            // Configuração do JWT
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = jwtSettings["Key"] ?? throw new InvalidOperationException("Chave JWT não configurada.");
 
@@ -103,7 +105,7 @@ namespace UniversidadeAPI
 
             var app = builder.Build();
 
-            // --- 5. CONFIGURAÇÃO DO PIPELINE HTTP ---
+            // --- CONFIGURAÇÃO DO PIPELINE HTTP ---
 
             if (app.Environment.IsDevelopment())
             {

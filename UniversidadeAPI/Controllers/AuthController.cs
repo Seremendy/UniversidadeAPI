@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversidadeAPI.Entities;
-using UniversidadeAPI.Repositories;
 using UniversidadeAPI.Services;
 using UniversidadeAPI.DTOs.Auth;
+using UniversidadeAPI.Repositories.Interfaces;
 
 [Authorize]
 [ApiController]

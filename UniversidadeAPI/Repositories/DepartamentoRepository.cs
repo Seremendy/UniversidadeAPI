@@ -2,6 +2,7 @@
 using MySqlConnector; 
 using System.Data;
 using UniversidadeAPI.Entities;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {

@@ -1,6 +1,6 @@
 ﻿using UniversidadeAPI.Entities;
 
-namespace UniversidadeAPI.Repositories
+namespace UniversidadeAPI.Repositories.Interfaces
 {
     public interface IDepartamentoRepository
     {

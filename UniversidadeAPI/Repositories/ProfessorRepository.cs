@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 using UniversidadeAPI.Entities; // Namespace das suas Entidades/Modelos
-using UniversidadeAPI.Repositories;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {

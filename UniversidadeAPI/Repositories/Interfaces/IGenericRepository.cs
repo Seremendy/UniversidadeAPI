@@ -1,4 +1,4 @@
-﻿namespace UniversidadeAPI.Repositories
+﻿namespace UniversidadeAPI.Repositories.Interfaces
 {
     // T será a sua classe de Modelo (Entidade), ex: Aluno, Curso, Professor
     public interface IGenericRepository<T> where T : class

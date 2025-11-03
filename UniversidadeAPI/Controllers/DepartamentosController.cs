@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversidadeAPI.Entities;
-using UniversidadeAPI.Repositories;
+using UniversidadeAPI.Repositories.Interfaces;
 
 
 namespace UniversidadeAPI.Controllers
