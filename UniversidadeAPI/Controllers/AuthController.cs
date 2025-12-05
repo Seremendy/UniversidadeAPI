@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] RegisterRequestDto dto)
     {
         if (!Enum.TryParse(dto.Role, true, out Role role))

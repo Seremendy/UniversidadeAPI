@@ -103,6 +103,16 @@ namespace UniversidadeAPI
             // Adiciona o serviço de Autorização
             builder.Services.AddAuthorization();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirAngular", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") // A URL do seu front Angular
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             // --- CONFIGURAÇÃO DO PIPELINE HTTP ---
@@ -113,7 +123,9 @@ namespace UniversidadeAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("PermitirAngular");
+
+            // app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             
