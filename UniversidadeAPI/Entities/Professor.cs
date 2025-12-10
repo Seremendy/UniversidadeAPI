@@ -11,7 +11,7 @@ namespace UniversidadeAPI.Entities
         public string ProfessorNome { get; set; } = string.Empty;
 
         [Required]
-        public DateOnly DataNascimento { get; set; }
+        public DateTime DataNascimento { get; set; }
 
         [Required]
         [StringLength(9)]

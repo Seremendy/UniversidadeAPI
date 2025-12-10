@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 using System.Data;
-using System.Text;
 using UniversidadeAPI.Repositories;
-using UniversidadeAPI.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UniversidadeAPI.Services;
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI
 {
@@ -15,21 +15,34 @@ namespace UniversidadeAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // --- CONFIGURAÇÃO DA CONEXÃO DB ---
+            // --- 1. CONFIGURAÇÃO DA CONEXÃO DB ---
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("A string de conexão 'DefaultConnection' não foi encontrada.");
 
-
-            // Adiciona o suporte aos Controladores
             builder.Services.AddControllers();
 
+            // --- 2. CONFIGURAÇÃO DO CORS (NOVO!) ---
+            // Isso permite que o Angular (localhost:4200) acesse esta API
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") // URL do seu Angular
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            // Injeção de Dependência do MySQL (Dapper)
             builder.Services.AddScoped<IDbConnection>(provider =>
             {
                 return new MySqlConnection(connectionString);
             });
 
-
+            // --- 3. INJEÇÃO DE DEPENDÊNCIAS (REPOSITÓRIOS E SERVIÇOS) ---
             builder.Services.AddSingleton<ITokenService, TokenService>();
+
+            // Repositórios
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
             builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
@@ -44,8 +57,7 @@ namespace UniversidadeAPI
             builder.Services.AddScoped<IPrerequisitoRepository, PrerequisitoRepository>();
             builder.Services.AddScoped<IGradeCurricularRepository, GradeCurricularRepository>();
 
-
-            // --- CONFIGURAÇÃO DO SWAGGER/OPENAPI ---
+            // --- 4. CONFIGURAÇÃO DO SWAGGER ---
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -77,11 +89,10 @@ namespace UniversidadeAPI
                 });
             });
 
-            // Configuração do JWT
+            // --- 5. CONFIGURAÇÃO JWT ---
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = jwtSettings["Key"] ?? throw new InvalidOperationException("Chave JWT não configurada.");
 
-            // Adiciona o serviço de Autenticação
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -91,31 +102,17 @@ namespace UniversidadeAPI
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         ValidAudience = builder.Configuration["Jwt:Audience"],
-
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
                 });
 
-            // Adiciona o serviço de Autorização
             builder.Services.AddAuthorization();
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("PermitirAngular", policy =>
-                {
-                    policy.WithOrigins("http://localhost:4200") // A URL do seu front Angular
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
-                });
-            });
 
             var app = builder.Build();
 
-            // --- CONFIGURAÇÃO DO PIPELINE HTTP ---
+            // --- 6. PIPELINE DE EXECUÇÃO ---
 
             if (app.Environment.IsDevelopment())
             {
@@ -124,11 +121,13 @@ namespace UniversidadeAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("PermitirAngular");
+
+            // APLICAR O CORS AQUI (Antes de Auth e Controllers)
+            app.UseCors("AngularApp");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Configura o roteamento para os Controladores
             app.MapControllers();
 
             app.Run();

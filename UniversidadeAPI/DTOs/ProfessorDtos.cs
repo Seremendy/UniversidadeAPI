@@ -2,7 +2,6 @@
 
 namespace UniversidadeAPI.DTOs
 {
-    // DTO para CRIAR um novo professor (POST)
     public class CreateProfessorRequestDto
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
@@ -10,7 +9,7 @@ namespace UniversidadeAPI.DTOs
         public string ProfessorNome { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "A data de nascimento é obrigatória")]
-        public DateOnly DataNascimento { get; set; }
+        public DateTime DataNascimento { get; set; }
 
         [Required(ErrorMessage = "O RG é obrigatório")]
         [StringLength(20)]
@@ -25,7 +24,6 @@ namespace UniversidadeAPI.DTOs
         public string Formacao { get; set; } = string.Empty;
     }
 
-    // DTO para ATUALIZAR um professor (PUT)
     public class UpdateProfessorRequestDto
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
@@ -33,7 +31,7 @@ namespace UniversidadeAPI.DTOs
         public string ProfessorNome { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "A data de nascimento é obrigatória")]
-        public DateOnly DataNascimento { get; set; }
+        public DateTime DataNascimento { get; set; }
 
         [Required(ErrorMessage = "O RG é obrigatório")]
         [StringLength(20)]
@@ -48,15 +46,11 @@ namespace UniversidadeAPI.DTOs
         public string Formacao { get; set; } = string.Empty;
     }
 
-    // DTO de RESPOSTA (GET)
     public class ProfessorResponseDto
     {
         public int ProfessorID { get; set; }
         public string ProfessorNome { get; set; } = string.Empty;
         public string Formacao { get; set; } = string.Empty;
 
-        // NOTA DE SEGURANÇA:
-        // Não incluímos DataNascimento, RG ou CPF na resposta padrão
-        // para proteger os dados pessoais do professor.
     }
 }
