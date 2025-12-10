@@ -1,11 +1,11 @@
-using MySqlConnector;
-using System.Data;
-using UniversidadeAPI.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
+using System.Data;
 using System.Text;
-using UniversidadeAPI.Services;
+using UniversidadeAPI.Repositories;
 using UniversidadeAPI.Repositories.Interfaces;
+using UniversidadeAPI.Services;
 
 namespace UniversidadeAPI
 {
@@ -19,7 +19,7 @@ namespace UniversidadeAPI
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("A string de conexão 'DefaultConnection' não foi encontrada.");
 
-            
+
             // Adiciona o suporte aos Controladores
             builder.Services.AddControllers();
 
@@ -123,12 +123,11 @@ namespace UniversidadeAPI
                 app.UseSwaggerUI();
             }
 
+            app.UseHttpsRedirection();
             app.UseCors("PermitirAngular");
-
-            // app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             // Configura o roteamento para os Controladores
             app.MapControllers();
 

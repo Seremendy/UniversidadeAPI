@@ -10,7 +10,7 @@ namespace UniversidadeAPI.Entities
         [StringLength(150, ErrorMessage = "O nome não pode ter mais de 150 caracteres")]
         public string AlunoNome { get; set; } = string.Empty;
 
-        public DateOnly DataNascimento { get; set; }
+        public DateTime DataNascimento { get; set; }
 
         [Required(ErrorMessage = "O RG é obrigatório")]
         [StringLength(9)]
