@@ -8,6 +8,7 @@ namespace UniversidadeAPI.Repositories
     {
         public ProfessorRepository(IDbConnection dbConnection) : base(dbConnection)
         {
+            // CORREÇÃO: O plural de Professor em português é "Professores"
             _tableName = "Professores";
         }
     }

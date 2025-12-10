@@ -4,6 +4,5 @@ namespace UniversidadeAPI.Repositories.Interfaces
 {
     public interface IProfessorRepository : IGenericRepository<Professor>
     {
-
     }
 }

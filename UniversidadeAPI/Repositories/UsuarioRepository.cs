@@ -5,21 +5,19 @@ using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
-    public class UsuarioRepository : IUsuarioRepository
+    public class UsuarioRepository : GenericRepository<Usuario>, IUsuarioRepository
     {
-        private readonly IDbConnection _dbConnection;
-        public UsuarioRepository(IDbConnection dbConnection)
+        public UsuarioRepository(IDbConnection dbConnection) : base(dbConnection)
         {
-            _dbConnection = dbConnection;
         }
 
         public async Task<Usuario?> GetByLoginAsync(string login)
         {
-            var sql = "SELECT UsuarioID, Login, SenhaHash, Role FROM Usuarios WHERE Login = @Login";
+            var sql = $"SELECT * FROM {_tableName} WHERE Login = @Login";
             return await _dbConnection.QuerySingleOrDefaultAsync<Usuario>(sql, new { Login = login });
         }
 
-        public async Task<int> AddAsync(Usuario usuario)
+        public override async Task<int> AddAsync(Usuario usuario)
         {
             var sql = @"
                 INSERT INTO Usuarios (Login, SenhaHash, Role)
@@ -30,21 +28,8 @@ namespace UniversidadeAPI.Repositories
             {
                 usuario.Login,
                 usuario.SenhaHash,
-                Role = usuario.Role.ToString()
+                Role = usuario.Role.ToString() 
             });
-        }
-
-        public async Task<IEnumerable<Usuario>> GetAllAsync()
-        {
-            var sql = "SELECT UsuarioID, Login, Role FROM Usuarios";
-            return await _dbConnection.QueryAsync<Usuario>(sql);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var sql = "DELETE FROM Usuarios WHERE UsuarioID = @Id";
-            var rowsAffected = await _dbConnection.ExecuteAsync(sql, new { Id = id });
-            return rowsAffected > 0;
         }
     }
 }

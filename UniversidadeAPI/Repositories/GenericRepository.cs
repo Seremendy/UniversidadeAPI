@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using System.Data;
-using System.Linq; // Importante para o Add/Update funcionar
+using System.Linq;
 using System.Reflection;
 using UniversidadeAPI.Repositories.Interfaces;
 
@@ -9,19 +9,17 @@ namespace UniversidadeAPI.Repositories
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly IDbConnection _dbConnection;
-        protected string _tableName; 
-        protected readonly string _primaryKey;
+        protected string _tableName;
+        protected string _primaryKey;
 
         public GenericRepository(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
 
-  
             _tableName = typeof(T).Name + "s";
 
             _primaryKey = typeof(T).Name + "ID";
         }
-
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -42,6 +40,7 @@ namespace UniversidadeAPI.Repositories
             var parameters = string.Join(", ", properties.Select(p => "@" + p));
 
             var sql = $"INSERT INTO {_tableName} ({columns}) VALUES ({parameters}); SELECT LAST_INSERT_ID();";
+
             return await _dbConnection.ExecuteScalarAsync<int>(sql, entity);
         }
 
@@ -51,6 +50,7 @@ namespace UniversidadeAPI.Repositories
             var updateClause = string.Join(", ", properties.Select(p => $"{p} = @{p}"));
 
             var sql = $"UPDATE {_tableName} SET {updateClause} WHERE {_primaryKey} = @{_primaryKey}";
+
             var rowsAffected = await _dbConnection.ExecuteAsync(sql, entity);
             return rowsAffected > 0;
         }
@@ -65,7 +65,8 @@ namespace UniversidadeAPI.Repositories
         private IEnumerable<string> GetProperties(T entity)
         {
             return typeof(T).GetProperties()
-                .Where(p => p.Name != _primaryKey && (p.PropertyType.IsValueType || p.PropertyType == typeof(string)))
+                .Where(p => p.Name != _primaryKey &&
+                           (p.PropertyType.IsValueType || p.PropertyType == typeof(string)))
                 .Select(p => p.Name);
         }
     }

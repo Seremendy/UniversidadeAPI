@@ -13,7 +13,7 @@ namespace UniversidadeAPI.Repositories
 
         public async Task<Aluno?> GetByCPFAsync(string cpf)
         {
-            var sql = "SELECT * FROM Alunos WHERE CPF = @CPF";
+            var sql = $"SELECT * FROM {_tableName} WHERE CPF = @CPF";
             return await _dbConnection.QuerySingleOrDefaultAsync<Aluno>(sql, new { CPF = cpf });
         }
     }
