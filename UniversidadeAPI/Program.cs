@@ -122,7 +122,7 @@ namespace UniversidadeAPI
 
             app.UseHttpsRedirection();
 
-            // APLICAR O CORS AQUI (Antes de Auth e Controllers)
+            
             app.UseCors("AngularApp");
 
             app.UseAuthentication();

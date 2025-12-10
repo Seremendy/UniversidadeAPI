@@ -2,8 +2,7 @@
 
 namespace UniversidadeAPI.DTOs
 {
-    // DTO usado para CRIAR uma nova relação
-    // (Ex: "Adicionar a disciplina 'Cálculo I' ao curso 'Engenharia'")
+    
     public class CreateGradeRequestDto
     {
         [Required(ErrorMessage = "O ID da Disciplina é obrigatório")]

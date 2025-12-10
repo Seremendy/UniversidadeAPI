@@ -53,11 +53,11 @@ public class AuthController : ControllerBase
         var novoId = await _usuarioRepository.AddAsync(usuario);
         usuario.UsuarioID = novoId;
 
-        // Retorna 201 Created
+        
         return CreatedAtAction(null, new { id = usuario.UsuarioID }, new { usuario.UsuarioID, usuario.Login, Role = usuario.Role.ToString() });
     }
 
-    // --- ENDPOINTS QUE FALTAVAM (ADICIONE ISTO) ---
+    
 
     [HttpGet("users")]
     [Authorize(Roles = "Admin")]

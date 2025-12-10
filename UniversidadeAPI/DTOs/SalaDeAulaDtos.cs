@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.DTOs
 {
-    // DTO para CRIAR uma nova sala (POST)
+    
     public class CreateSalaDeAulaRequestDto
     {
         [Required(ErrorMessage = "A capacidade é obrigatória")]
@@ -18,7 +18,7 @@ namespace UniversidadeAPI.DTOs
         public string PredioNome { get; set; } = string.Empty;
     }
 
-    // DTO para ATUALIZAR uma sala (PUT)
+    
     public class UpdateSalaDeAulaRequestDto
     {
         [Required(ErrorMessage = "A capacidade é obrigatória")]
@@ -34,7 +34,7 @@ namespace UniversidadeAPI.DTOs
         public string PredioNome { get; set; } = string.Empty;
     }
 
-    // DTO de RESPOSTA (GET)
+    
     public class SalaDeAulaResponseDto
     {
         public int SalaDeAulaID { get; set; }

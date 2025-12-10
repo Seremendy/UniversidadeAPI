@@ -65,7 +65,7 @@ namespace UniversidadeAPI.Controllers
         [HttpGet("ParaDisciplina/{disciplinaId}")]
         public async Task<ActionResult<IEnumerable<PrerequisitoResponseDto>>> GetPrerequisitosParaDisciplina(int disciplinaId)
         {
-            // (Validar se a disciplinaId existe)
+            
             if (await _disciplinaRepository.GetByIdAsync(disciplinaId) == null)
             {
                 return NotFound(new { Message = $"Disciplina com ID {disciplinaId} não encontrada." });
@@ -77,8 +77,7 @@ namespace UniversidadeAPI.Controllers
             return Ok(prerequisitosResponse);
         }
 
-        // Este é um DELETE especial que usa a chave composta
-        // DELETE /api/Prerequisitos?disciplinaId=5&preRequisitoId=2
+        
         [HttpDelete]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeletePrerequisito([FromQuery] int disciplinaId, [FromQuery] int preRequisitoId)

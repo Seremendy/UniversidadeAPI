@@ -31,7 +31,7 @@ namespace UniversidadeAPI.Controllers
             return Ok(aluno);
         }
 
-        // POST e PUT usam DateTime, conforme corrigimos anteriormente
+        
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] Aluno aluno)
         {

@@ -6,7 +6,7 @@ using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Controllers
 {
-    [Authorize] // Protege toda a classe
+    [Authorize] 
     [ApiController]
     [Route("api/[controller]")]
     public class DepartamentosController : ControllerBase
@@ -32,9 +32,9 @@ namespace UniversidadeAPI.Controllers
 
             if (departamento == null)
             {
-                return NotFound(); // 404
+                return NotFound(); 
             }
-            return Ok(departamento); // 200
+            return Ok(departamento); 
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace UniversidadeAPI.Controllers
             var novoId = await _repository.AddAsync(departamento);
             departamento.DepartamentoID = novoId;
 
-            // Retorna 201 Created (Com a URL do novo recurso)
+            
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = departamento.DepartamentoID },
@@ -64,7 +64,7 @@ namespace UniversidadeAPI.Controllers
             {
                 return NotFound(new { Message = "Departamento não encontrado." });
             }
-            // Retorna 204 No Content
+            
             return NoContent();
         }
 
@@ -78,7 +78,7 @@ namespace UniversidadeAPI.Controllers
             {
                 return NotFound(new { Message = "Departamento não encontrado." });
             }
-            return NoContent(); // 204 No Content
+            return NoContent(); 
         }
     }
 }

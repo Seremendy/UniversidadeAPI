@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.DTOs
 {
-    // DTO para CRIAR uma nova turma (POST)
+    
     public class CreateTurmaRequestDto
     {
         [Required(ErrorMessage = "O semestre é obrigatório (ex: 2025.2)")]
@@ -26,8 +26,7 @@ namespace UniversidadeAPI.DTOs
         public int HorarioID { get; set; }
     }
 
-    // DTO para ATUALIZAR uma turma (PUT)
-    // (Idêntico ao de Criar, mas é boa prática mantê-los separados)
+    
     public class UpdateTurmaRequestDto
     {
         [Required(ErrorMessage = "O semestre é obrigatório (ex: 2025.2)")]
@@ -51,7 +50,7 @@ namespace UniversidadeAPI.DTOs
         public int HorarioID { get; set; }
     }
 
-    // DTO de RESPOSTA (GET)
+    
     public class TurmaResponseDto
     {
         public int TurmaID { get; set; }

@@ -94,11 +94,11 @@ namespace UniversidadeAPI.Controllers
 
             if (turmasNestaSala.Any())
             {
-                // ...bloqueie a exclusão e retorne um 409 Conflict.
+                
                 return Conflict(new { Message = "Esta sala de aula não pode ser apagada pois está a ser utilizada por uma ou mais turmas." });
             }
 
-            // Se a verificação passar (nenhuma turma usa a sala), apague.
+            
             await _salaDeAulaRepository.DeleteAsync(id);
 
             return NoContent();
