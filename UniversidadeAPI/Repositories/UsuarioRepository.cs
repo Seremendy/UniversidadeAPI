@@ -34,5 +34,17 @@ namespace UniversidadeAPI.Repositories
             });
         }
 
+        public async Task<IEnumerable<Usuario>> GetAllAsync()
+        {
+            var sql = "SELECT UsuarioID, Login, Role FROM Usuarios";
+            return await _dbConnection.QueryAsync<Usuario>(sql);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var sql = "DELETE FROM Usuarios WHERE UsuarioID = @Id";
+            var rowsAffected = await _dbConnection.ExecuteAsync(sql, new { Id = id });
+            return rowsAffected > 0;
+        }
     }
 }

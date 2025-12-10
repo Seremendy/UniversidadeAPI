@@ -73,4 +73,35 @@ public class AuthController : ControllerBase
 
         return CreatedAtAction(null, new { id = responseDto.UsuarioID }, responseDto);
     }
+
+    [HttpGet("users")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<UsuarioResponseDto>>> GetUsers()
+    {
+        // Lembre-se de implementar o GetAllAsync no Repositório antes!
+        var usuarios = await _usuarioRepository.GetAllAsync();
+
+        var response = usuarios.Select(u => new UsuarioResponseDto
+        {
+            UsuarioID = u.UsuarioID,
+            Login = u.Login,
+            Role = u.Role.ToString()
+        });
+
+        return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")] // Segurança máxima: Só Admin deleta!
+    public async Task<ActionResult> DeleteUser(int id)
+    {
+        // Opcional: Impedir que o Admin se auto-delete (evita trancar o sistema fora)
+        // Você precisaria pegar o ID do token, mas por enquanto vamos deixar simples.
+
+        var sucesso = await _usuarioRepository.DeleteAsync(id);
+
+        if (!sucesso) return NotFound(new { Message = "Usuário não encontrado." });
+
+        return NoContent(); 
+    }
 }
