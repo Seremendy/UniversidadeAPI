@@ -6,27 +6,20 @@ namespace UniversidadeAPI.DTOs
 
     public class CreateHorarioRequestDto
     {
-
-        [Required(ErrorMessage = "O Dia da Semana é obrigatório")]
+        [Required(ErrorMessage = "O dia da semana é obrigatório.")]
         public string DiaSemana { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "A hora de início é obrigatória")]
+        [Required(ErrorMessage = "Hora de início é obrigatória.")]
         public TimeOnly HoraInicio { get; set; }
 
-        [Required(ErrorMessage = "A hora de fim é obrigatória")]
+        [Required(ErrorMessage = "Hora de fim é obrigatória.")]
         public TimeOnly HoraFim { get; set; }
     }
 
     public class UpdateHorarioRequestDto
     {
-
-        [Required(ErrorMessage = "O Dia da Semana é obrigatório")]
         public string DiaSemana { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "A hora de início é obrigatória")]
         public TimeOnly HoraInicio { get; set; }
-
-        [Required(ErrorMessage = "A hora de fim é obrigatória")]
         public TimeOnly HoraFim { get; set; }
     }
 

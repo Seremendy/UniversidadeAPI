@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
-using UniversidadeAPI.Repositories.Interfaces; 
+using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Controllers
 {
@@ -12,29 +13,28 @@ namespace UniversidadeAPI.Controllers
     public class ProfessoresController : ControllerBase
     {
         private readonly IProfessorRepository _professorRepository;
+        private readonly IMapper _mapper; // Injeção do Mapper
 
-        public ProfessoresController(IProfessorRepository professorRepository)
+        public ProfessoresController(IProfessorRepository professorRepository, IMapper mapper)
         {
             _professorRepository = professorRepository;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")] 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProfessorResponseDto>> CreateProfessor([FromBody] CreateProfessorRequestDto professorDto)
         {
-            var professorEntidade = new Professor
-            {
-                ProfessorNome = professorDto.ProfessorNome,
-                DataNascimento = professorDto.DataNascimento,
-                RG = professorDto.RG,
-                CPF = professorDto.CPF,
-                Formacao = professorDto.Formacao
-            };
+            // Validação automática do DTO já ocorreu (ModelState)
+
+            // Conversão DTO -> Entidade
+            var professorEntidade = _mapper.Map<Professor>(professorDto);
 
             var novoId = await _professorRepository.AddAsync(professorEntidade);
             professorEntidade.ProfessorID = novoId;
 
-            var professorResponse = MapToResponseDto(professorEntidade);
+            // Retorno (Entidade -> DTO)
+            var professorResponse = _mapper.Map<ProfessorResponseDto>(professorEntidade);
 
             return CreatedAtAction(nameof(GetProfessorById), new { id = professorResponse.ProfessorID }, professorResponse);
         }
@@ -49,7 +49,7 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Professor não encontrado." });
             }
 
-            var professorResponse = MapToResponseDto(professorEntidade);
+            var professorResponse = _mapper.Map<ProfessorResponseDto>(professorEntidade);
             return Ok(professorResponse);
         }
 
@@ -57,8 +57,7 @@ namespace UniversidadeAPI.Controllers
         public async Task<ActionResult<IEnumerable<ProfessorResponseDto>>> GetAllProfessores()
         {
             var professoresEntidades = await _professorRepository.GetAllAsync();
-
-            var professoresResponse = professoresEntidades.Select(MapToResponseDto);
+            var professoresResponse = _mapper.Map<IEnumerable<ProfessorResponseDto>>(professoresEntidades);
 
             return Ok(professoresResponse);
         }
@@ -73,11 +72,11 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Professor não encontrado." });
             }
 
-            entidadeExistente.ProfessorNome = professorDto.ProfessorNome;
-            entidadeExistente.DataNascimento = professorDto.DataNascimento;
-            entidadeExistente.RG = professorDto.RG;
-            entidadeExistente.CPF = professorDto.CPF;
-            entidadeExistente.Formacao = professorDto.Formacao;
+            // Atualiza os dados da entidade existente com o que veio do DTO
+            _mapper.Map(professorDto, entidadeExistente);
+
+            // Garante que o ID não se perdeu
+            entidadeExistente.ProfessorID = id;
 
             await _professorRepository.UpdateAsync(entidadeExistente);
 
@@ -97,16 +96,6 @@ namespace UniversidadeAPI.Controllers
             await _professorRepository.DeleteAsync(id);
 
             return NoContent();
-        }
-
-        private ProfessorResponseDto MapToResponseDto(Professor professor)
-        {
-            return new ProfessorResponseDto
-            {
-                ProfessorID = professor.ProfessorID,
-                ProfessorNome = professor.ProfessorNome,
-                Formacao = professor.Formacao
-            };
         }
     }
 }

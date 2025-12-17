@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
 using UniversidadeAPI.Repositories.Interfaces;
+
 namespace UniversidadeAPI.Controllers
 {
     [Authorize]
@@ -13,44 +15,48 @@ namespace UniversidadeAPI.Controllers
         private readonly IMatriculaRepository _matriculaRepository;
         private readonly IAlunoRepository _alunoRepository;
         private readonly ICursoRepository _cursoRepository;
+        private readonly IMapper _mapper; // Injeção do Mapper
 
         public MatriculasController(
             IMatriculaRepository matriculaRepository,
             IAlunoRepository alunoRepository,
-            ICursoRepository cursoRepository)
+            ICursoRepository cursoRepository,
+            IMapper mapper)
         {
             _matriculaRepository = matriculaRepository;
             _alunoRepository = alunoRepository;
             _cursoRepository = cursoRepository;
+            _mapper = mapper;
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<MatriculaResponseDto>> CreateMatricula([FromBody] CreateMatriculaRequestDto matriculaDto)
         {
-
+            // Validação 1: Aluno existe?
             if (await _alunoRepository.GetByIdAsync(matriculaDto.AlunoID) == null)
             {
                 return NotFound(new { Message = $"Aluno com ID {matriculaDto.AlunoID} não encontrado." });
             }
 
+            // Validação 2: Curso existe?
             if (await _cursoRepository.GetByIdAsync(matriculaDto.CursoID) == null)
             {
                 return NotFound(new { Message = $"Curso com ID {matriculaDto.CursoID} não encontrado." });
             }
 
-            var matriculaEntidade = new Matricula
-            {
-                AlunoID = matriculaDto.AlunoID,
-                CursoID = matriculaDto.CursoID,
-                DataMatricula = DateTime.UtcNow,
-                MatriculaAtiva = true
-            };
+            // Conversão DTO -> Entidade
+            var matriculaEntidade = _mapper.Map<Matricula>(matriculaDto);
+
+            // Regras de negócio adicionais (que não vêm do DTO)
+            matriculaEntidade.DataMatricula = DateTime.UtcNow;
+            matriculaEntidade.MatriculaAtiva = true;
 
             var novoId = await _matriculaRepository.AddAsync(matriculaEntidade);
             matriculaEntidade.MatriculaID = novoId;
 
-            var matriculaResponse = MapToResponseDto(matriculaEntidade);
+            // Retorno formatado
+            var matriculaResponse = _mapper.Map<MatriculaResponseDto>(matriculaEntidade);
 
             return CreatedAtAction(nameof(GetMatriculaById), new { id = matriculaResponse.MatriculaID }, matriculaResponse);
         }
@@ -65,7 +71,7 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Matrícula não encontrada." });
             }
 
-            var matriculaResponse = MapToResponseDto(matriculaEntidade);
+            var matriculaResponse = _mapper.Map<MatriculaResponseDto>(matriculaEntidade);
             return Ok(matriculaResponse);
         }
 
@@ -73,7 +79,7 @@ namespace UniversidadeAPI.Controllers
         public async Task<ActionResult<IEnumerable<MatriculaResponseDto>>> GetAllMatriculas()
         {
             var matriculasEntidades = await _matriculaRepository.GetAllAsync();
-            var matriculasResponse = matriculasEntidades.Select(MapToResponseDto);
+            var matriculasResponse = _mapper.Map<IEnumerable<MatriculaResponseDto>>(matriculasEntidades);
             return Ok(matriculasResponse);
         }
 
@@ -91,7 +97,7 @@ namespace UniversidadeAPI.Controllers
 
             await _matriculaRepository.UpdateAsync(entidadeExistente);
 
-            return NoContent(); 
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -107,18 +113,6 @@ namespace UniversidadeAPI.Controllers
             await _matriculaRepository.DeleteAsync(id);
 
             return NoContent();
-        }
-
-        private MatriculaResponseDto MapToResponseDto(Matricula matricula)
-        {
-            return new MatriculaResponseDto
-            {
-                MatriculaID = matricula.MatriculaID,
-                AlunoID = matricula.AlunoID,
-                CursoID = matricula.CursoID,
-                DataMatricula = matricula.DataMatricula,
-                MatriculaAtiva = matricula.MatriculaAtiva
-            };
         }
     }
 }

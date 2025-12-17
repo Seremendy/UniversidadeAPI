@@ -1,11 +1,14 @@
-using MySqlConnector;
-using System.Data;
-using UniversidadeAPI.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
+using System.Data;
 using System.Text;
-using UniversidadeAPI.Services;
+using UniversidadeAPI.Repositories;
 using UniversidadeAPI.Repositories.Interfaces;
+using UniversidadeAPI.Services;
+using UniversidadeAPI.Services.Interfaces;
 
 namespace UniversidadeAPI
 {
@@ -20,6 +23,9 @@ namespace UniversidadeAPI
                 ?? throw new InvalidOperationException("A string de conexão 'DefaultConnection' não foi encontrada.");
 
             builder.Services.AddControllers();
+
+            builder.Services.AddFluentValidationAutoValidation(); 
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
             // --- 2. CONFIGURAÇÃO DO CORS (NOVO!) ---
             // Isso permite que o Angular (localhost:4200) acesse esta API
@@ -56,6 +62,10 @@ namespace UniversidadeAPI
             builder.Services.AddScoped<INotaRepository, NotaRepository>();
             builder.Services.AddScoped<IPrerequisitoRepository, PrerequisitoRepository>();
             builder.Services.AddScoped<IGradeCurricularRepository, GradeCurricularRepository>();
+
+            builder.Services.AddScoped<ITurmaService, TurmaService>();
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             // --- 4. CONFIGURAÇÃO DO SWAGGER ---
             builder.Services.AddEndpointsApiExplorer();

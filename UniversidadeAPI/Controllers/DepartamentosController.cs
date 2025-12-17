@@ -1,70 +1,90 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
 using UniversidadeAPI.Repositories.Interfaces;
 
-
 namespace UniversidadeAPI.Controllers
 {
-    [Authorize] 
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DepartamentosController : ControllerBase
     {
         private readonly IDepartamentoRepository _repository;
+        private readonly IMapper _mapper; // Injeção do AutoMapper
 
-        public DepartamentosController(IDepartamentoRepository repository)
+        public DepartamentosController(IDepartamentoRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Departamento>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DepartamentoDtos>>> GetAll()
         {
             var departamentos = await _repository.GetAllAsync();
-            return Ok(departamentos);
+
+            // Converte a lista de Entidades para lista de DTOs
+            var departamentosDto = _mapper.Map<IEnumerable<DepartamentoDtos>>(departamentos);
+
+            return Ok(departamentosDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Departamento>> GetById(int id)
+        public async Task<ActionResult<DepartamentoDtos>> GetById(int id)
         {
             var departamento = await _repository.GetByIdAsync(id);
 
             if (departamento == null)
             {
-                return NotFound(); 
+                return NotFound(new { Message = "Departamento não encontrado." });
             }
-            return Ok(departamento); 
+
+            // Converte Entidade -> DTO
+            var departamentoDto = _mapper.Map<DepartamentoDtos>(departamento);
+
+            return Ok(departamentoDto);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Create([FromBody] Departamento departamento)
+        public async Task<ActionResult> Create([FromBody] CreateDepartamentoRequestDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var departamento = _mapper.Map<Departamento>(dto);
+
             var novoId = await _repository.AddAsync(departamento);
             departamento.DepartamentoID = novoId;
 
-            
+            var responseDto = _mapper.Map<DepartamentoDtos>(departamento);
+
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = departamento.DepartamentoID },
-                departamento
+                responseDto
             );
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Update(int id, [FromBody] Departamento departamento)
+        public async Task<ActionResult> Update(int id, [FromBody] CreateDepartamentoRequestDto dto)
         {
-            departamento.DepartamentoID = id;
+            var departamentoExistente = await _repository.GetByIdAsync(id);
 
-            var success = await _repository.UpdateAsync(departamento);
-
-            if (!success)
+            if (departamentoExistente == null)
             {
                 return NotFound(new { Message = "Departamento não encontrado." });
             }
-            
+
+            _mapper.Map(dto, departamentoExistente);
+
+            departamentoExistente.DepartamentoID = id;
+
+            await _repository.UpdateAsync(departamentoExistente);
+
             return NoContent();
         }
 
@@ -78,7 +98,7 @@ namespace UniversidadeAPI.Controllers
             {
                 return NotFound(new { Message = "Departamento não encontrado." });
             }
-            return NoContent(); 
+            return NoContent();
         }
     }
 }

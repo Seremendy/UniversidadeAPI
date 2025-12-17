@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
@@ -12,37 +13,38 @@ namespace UniversidadeAPI.Controllers
     public class HorarioController : ControllerBase
     {
         private readonly IHorarioRepository _horarioRepository;
+        private readonly IMapper _mapper; // Injeção do Mapper
 
-        public HorarioController(IHorarioRepository horarioRepository)
+        public HorarioController(IHorarioRepository horarioRepository, IMapper mapper)
         {
             _horarioRepository = horarioRepository;
+            _mapper = mapper;
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<HorarioResponseDto>> CreateHorario([FromBody] CreateHorarioRequestDto horarioDto)
         {
-            if (!Enum.TryParse(horarioDto.DiaSemana, true, out DiaSemana diaSemanaEnum))
+            // 1. CORREÇÃO DE SEGURANÇA (Evita Erro 500)
+            // Tenta converter a string para o Enum. Se falhar, avisa o usuário.
+            if (!Enum.TryParse<DiaSemana>(horarioDto.DiaSemana, true, out _))
             {
-                return BadRequest(new { Message = "Dia da semana inválido. Use: Segunda, Terca, Quarta, Quinta, Sexta." });
+                return BadRequest(new
+                {
+                    Message = "Dia da semana inválido. Valores aceitos: Segunda, Terca, Quarta, Quinta, Sexta."
+                });
             }
 
-            if (horarioDto.HoraInicio >= horarioDto.HoraFim)
-            {
-                return BadRequest(new { Message = "A hora de início deve ser anterior à hora de fim." });
-            }
-
-            var horarioEntidade = new Horario
-            {
-                DiaSemana = diaSemanaEnum, 
-                HoraInicio = horarioDto.HoraInicio,
-                HoraFim = horarioDto.HoraFim
-            };
+            // 2. AutoMapper (Converte DTO -> Entidade)
+            // Como já validamos acima, o AutoMapper não vai quebrar aqui.
+            var horarioEntidade = _mapper.Map<Horario>(horarioDto);
 
             var novoId = await _horarioRepository.AddAsync(horarioEntidade);
             horarioEntidade.HorarioID = novoId;
 
-            var horarioResponse = MapToResponseDto(horarioEntidade);
+            // 3. Retorno Formatado
+            var horarioResponse = _mapper.Map<HorarioResponseDto>(horarioEntidade);
+
             return CreatedAtAction(nameof(GetHorarioById), new { id = horarioResponse.HorarioID }, horarioResponse);
         }
 
@@ -50,10 +52,9 @@ namespace UniversidadeAPI.Controllers
         public async Task<ActionResult<IEnumerable<HorarioResponseDto>>> GetAllHorarios()
         {
             var horariosEntidades = await _horarioRepository.GetAllAsync();
-            var horariosResponse = horariosEntidades.Select(MapToResponseDto);
+            var horariosResponse = _mapper.Map<IEnumerable<HorarioResponseDto>>(horariosEntidades);
             return Ok(horariosResponse);
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HorarioResponseDto>> GetHorarioById(int id)
@@ -63,7 +64,9 @@ namespace UniversidadeAPI.Controllers
             {
                 return NotFound(new { Message = "Horário não encontrado." });
             }
-            return Ok(MapToResponseDto(horarioEntidade));
+
+            var response = _mapper.Map<HorarioResponseDto>(horarioEntidade);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
@@ -78,17 +81,6 @@ namespace UniversidadeAPI.Controllers
 
             await _horarioRepository.DeleteAsync(id);
             return NoContent();
-        }
-
-        private HorarioResponseDto MapToResponseDto(Horario horario)
-        {
-            return new HorarioResponseDto
-            {
-                HorarioID = horario.HorarioID,
-                DiaSemana = horario.DiaSemana.ToString(),
-                HoraInicio = horario.HoraInicio,
-                HoraFim = horario.HoraFim
-            };
         }
     }
 }
