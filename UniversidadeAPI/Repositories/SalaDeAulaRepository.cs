@@ -13,19 +13,19 @@ namespace UniversidadeAPI.Repositories
         {
             _dbConnection = dbConnection;
         }
-        public async Task<IEnumerable<SalaDeAula>> GetAllAsync()
+        public async Task<IEnumerable<SalasDeAula>> GetAllAsync()
         {
             var sql = "SELECT * FROM SalasDeAula";
-            return await _dbConnection.QueryAsync<SalaDeAula>(sql);
+            return await _dbConnection.QueryAsync<SalasDeAula>(sql);
         }
 
-        public async Task<SalaDeAula?> GetByIdAsync(int id)
+        public async Task<SalasDeAula?> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM SalasDeAula WHERE SalaDeAulaID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<SalaDeAula>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<SalasDeAula>(sql, new { Id = id });
         }
 
-        public async Task<int> AddAsync(SalaDeAula entity)
+        public async Task<int> AddAsync(SalasDeAula entity)
         {
             var sql = @"
                 INSERT INTO SalasDeAula (Capacidade, NumeroSala, PredioNome)
@@ -35,7 +35,7 @@ namespace UniversidadeAPI.Repositories
             return await _dbConnection.ExecuteScalarAsync<int>(sql, entity);
         }
 
-        public async Task<bool> UpdateAsync(SalaDeAula entity)
+        public async Task<bool> UpdateAsync(SalasDeAula entity)
         {
             var sql = @"
                 UPDATE SalasDeAula SET

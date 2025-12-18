@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class Turma
+    public class Turmas
     {
         public int TurmaID { get; set; }
 

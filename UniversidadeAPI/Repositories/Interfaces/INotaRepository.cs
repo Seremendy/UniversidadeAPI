@@ -2,8 +2,8 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface INotaRepository : IGenericRepository<Nota>
+    public interface INotaRepository : IGenericRepository<Notas>
     {
-        Task<IEnumerable<Nota>> GetNotasPorAlunoAsync(int alunoId);
+        Task<IEnumerable<Notas>> GetNotasPorAlunoAsync(int alunoId);
     }
 }

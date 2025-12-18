@@ -107,7 +107,7 @@ namespace UniversidadeAPI.Controllers
                 return BadRequest(new { Message = "Este aluno já possui uma nota lançada para esta disciplina. Use a edição para alterar a nota." });
             }
 
-            var notaEntidade = _mapper.Map<Nota>(notaDto);
+            var notaEntidade = _mapper.Map<Notas>(notaDto);
 
             var novoId = await _notaRepository.AddAsync(notaEntidade);
             notaEntidade.NotaID = novoId;

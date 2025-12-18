@@ -14,19 +14,19 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Turma>> GetAllAsync()
+        public async Task<IEnumerable<Turmas>> GetAllAsync()
         {
             var sql = "SELECT * FROM Turmas";
-            return await _dbConnection.QueryAsync<Turma>(sql);
+            return await _dbConnection.QueryAsync<Turmas>(sql);
         }
 
-        public async Task<Turma?> GetByIdAsync(int id)
+        public async Task<Turmas?> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Turmas WHERE TurmaID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<Turma>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<Turmas>(sql, new { Id = id });
         }
 
-        public async Task<int> AddAsync(Turma entity)
+        public async Task<int> AddAsync(Turmas entity)
         {
             var sql = @"
                 INSERT INTO Turmas (Semestre, DisciplinaID, SalaDeAulaID, ProfessorID, HorarioID)
@@ -36,7 +36,7 @@ namespace UniversidadeAPI.Repositories
             return await _dbConnection.ExecuteScalarAsync<int>(sql, entity);
         }
 
-        public async Task<bool> UpdateAsync(Turma entity)
+        public async Task<bool> UpdateAsync(Turmas entity)
         {
             var sql = @"
                 UPDATE Turmas SET
@@ -58,10 +58,10 @@ namespace UniversidadeAPI.Repositories
             return rowsAffected > 0;
         }
 
-        public async Task<IEnumerable<Turma>> GetTurmasBySalaIdAsync(int salaDeAulaId)
+        public async Task<IEnumerable<Turmas>> GetTurmasBySalaIdAsync(int salaDeAulaId)
         {
             var sql = "SELECT * FROM Turmas WHERE SalaDeAulaID = @SalaDeAulaId";
-            return await _dbConnection.QueryAsync<Turma>(sql, new { SalaDeAulaId = salaDeAulaId });
+            return await _dbConnection.QueryAsync<Turmas>(sql, new { SalaDeAulaId = salaDeAulaId });
         }
     }
 }

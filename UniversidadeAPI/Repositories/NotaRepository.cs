@@ -14,20 +14,20 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Nota>> GetAllAsync()
+        public async Task<IEnumerable<Notas>> GetAllAsync()
         {
             
             var sql = "SELECT * FROM notas";
-            return await _dbConnection.QueryAsync<Nota>(sql);
+            return await _dbConnection.QueryAsync<Notas>(sql);
         }
 
-        public async Task<Nota?> GetByIdAsync(int id)
+        public async Task<Notas?> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM notas WHERE NotaID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<Nota>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<Notas>(sql, new { Id = id });
         }
 
-        public async Task<int> AddAsync(Nota entity)
+        public async Task<int> AddAsync(Notas entity)
         {
             
             var sql = @"
@@ -43,7 +43,7 @@ namespace UniversidadeAPI.Repositories
             });
         }
 
-        public async Task<bool> UpdateAsync(Nota entity)
+        public async Task<bool> UpdateAsync(Notas entity)
         {
             
             var sql = @"
@@ -65,17 +65,17 @@ namespace UniversidadeAPI.Repositories
             return rowsAffected > 0;
         }
 
-        public async Task<IEnumerable<Nota>> GetNotasPorAlunoAsync(int alunoId)
+        public async Task<IEnumerable<Notas>> GetNotasPorAlunoAsync(int alunoId)
         {
             
             var sql = "SELECT * FROM notas WHERE AlunoID = @AlunoId";
-            return await _dbConnection.QueryAsync<Nota>(sql, new { AlunoId = alunoId });
+            return await _dbConnection.QueryAsync<Notas>(sql, new { AlunoId = alunoId });
         }
 
-        public async Task<IEnumerable<Nota>> GetNotasPorDisciplinaAsync(int disciplinaId)
+        public async Task<IEnumerable<Notas>> GetNotasPorDisciplinaAsync(int disciplinaId)
         {
             var sql = "SELECT * FROM notas WHERE DisciplinaID = @DisciplinaId";
-            return await _dbConnection.QueryAsync<Nota>(sql, new { DisciplinaId = disciplinaId });
+            return await _dbConnection.QueryAsync<Notas>(sql, new { DisciplinaId = disciplinaId });
         }
     }
 }

@@ -46,7 +46,7 @@ namespace UniversidadeAPI.Controllers
             }
 
             // Conversão DTO -> Entidade
-            var matriculaEntidade = _mapper.Map<Matricula>(matriculaDto);
+            var matriculaEntidade = _mapper.Map<Matriculas>(matriculaDto);
 
             // Regras de negócio adicionais (que não vêm do DTO)
             matriculaEntidade.DataMatricula = DateTime.UtcNow;

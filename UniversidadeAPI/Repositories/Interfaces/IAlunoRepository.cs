@@ -2,9 +2,9 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface IAlunoRepository : IGenericRepository<Aluno>
+    public interface IAlunoRepository : IGenericRepository<Alunos>
     {
 
-        Task<Aluno?> GetByCPFAsync(string cpf);
+        Task<Alunos?> GetByCPFAsync(string cpf);
     }
 }

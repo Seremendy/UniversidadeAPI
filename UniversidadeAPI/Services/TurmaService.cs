@@ -37,7 +37,7 @@ namespace UniversidadeAPI.Services
 
             // ANTES: Mapeamento Manual (Várias linhas)
             // AGORA: Uma linha mágica
-            var turmaEntidade = _mapper.Map<Turma>(turmaDto);
+            var turmaEntidade = _mapper.Map<Turmas>(turmaDto);
 
             var novoId = await _turmaRepository.AddAsync(turmaEntidade);
             turmaEntidade.TurmaID = novoId;

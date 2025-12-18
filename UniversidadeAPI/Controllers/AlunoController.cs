@@ -22,13 +22,13 @@ namespace UniversidadeAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Aluno>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Alunos>>> GetAll()
         {
             return Ok(await _repository.GetAllAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Aluno>> GetById(int id)
+        public async Task<ActionResult<Alunos>> GetById(int id)
         {
             var aluno = await _repository.GetByIdAsync(id);
             if (aluno == null) return NotFound();
@@ -40,7 +40,7 @@ namespace UniversidadeAPI.Controllers
         public async Task<ActionResult> Create([FromBody] CreateAlunoRequestDto dto)
         {
             
-            var aluno = _mapper.Map<Aluno>(dto);
+            var aluno = _mapper.Map<Alunos>(dto);
 
             var id = await _repository.AddAsync(aluno);
 

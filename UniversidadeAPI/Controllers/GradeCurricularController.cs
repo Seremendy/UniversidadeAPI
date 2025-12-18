@@ -47,7 +47,7 @@ namespace UniversidadeAPI.Controllers
             }
 
             // Conversão automática (DTO -> Entidade)
-            var gradeEntidade = _mapper.Map<GradeCurricular>(gradeDto);
+            var gradeEntidade = _mapper.Map<GradeCurriculares>(gradeDto);
 
             var novoId = await _gradeRepository.AddAsync(gradeEntidade);
             gradeEntidade.GradeCurricularID = novoId;

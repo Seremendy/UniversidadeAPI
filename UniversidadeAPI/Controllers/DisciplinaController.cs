@@ -59,7 +59,7 @@ namespace UniversidadeAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             // Converte DTO -> Entidade
-            var disciplina = _mapper.Map<Disciplina>(dto);
+            var disciplina = _mapper.Map<Disciplinas>(dto);
 
             var novoId = await _repository.AddAsync(disciplina);
             disciplina.DisciplinaID = novoId;

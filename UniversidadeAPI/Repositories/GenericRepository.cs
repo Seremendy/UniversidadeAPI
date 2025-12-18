@@ -16,7 +16,7 @@ namespace UniversidadeAPI.Repositories
         {
             _dbConnection = dbConnection;
 
-            _tableName = typeof(T).Name + "s";
+            _tableName = typeof(T).Name;
 
             _primaryKey = typeof(T).Name + "ID";
         }

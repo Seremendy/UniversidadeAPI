@@ -7,11 +7,11 @@ namespace UniversidadeAPI.Repositories.Interfaces
     public interface IUsuarioRepository
     {
         // Método específico de Login
-        Task<Usuario?> GetByLoginAsync(string login);
+        Task<Usuarios?> GetByLoginAsync(string login);
 
         // Métodos que replicam o comportamento necessário do CRUD
-        Task<int> AddAsync(Usuario usuario);
-        Task<IEnumerable<Usuario>> GetAllAsync();
+        Task<int> AddAsync(Usuarios usuario);
+        Task<IEnumerable<Usuarios>> GetAllAsync();
         Task<bool> DeleteAsync(int id);
     }
 }

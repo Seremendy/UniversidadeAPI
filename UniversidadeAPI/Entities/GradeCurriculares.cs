@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class GradeCurricular
+    public class GradeCurriculares
     {
         public int GradeCurricularID { get; set; }
 

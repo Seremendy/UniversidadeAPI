@@ -14,19 +14,19 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Prerequisito>> GetAllAsync()
+        public async Task<IEnumerable<Prerequisitos>> GetAllAsync()
         {
             var sql = "SELECT * FROM Prerequisitos";
-            return await _dbConnection.QueryAsync<Prerequisito>(sql);
+            return await _dbConnection.QueryAsync<Prerequisitos>(sql);
         }
 
-        public async Task<IEnumerable<Prerequisito>> GetPrerequisitosParaDisciplinaAsync(int disciplinaId)
+        public async Task<IEnumerable<Prerequisitos>> GetPrerequisitosParaDisciplinaAsync(int disciplinaId)
         {
             var sql = "SELECT * FROM Prerequisitos WHERE DisciplinaID = @DisciplinaId";
-            return await _dbConnection.QueryAsync<Prerequisito>(sql, new { DisciplinaId = disciplinaId });
+            return await _dbConnection.QueryAsync<Prerequisitos>(sql, new { DisciplinaId = disciplinaId });
         }
 
-        public async Task<int> AddAsync(Prerequisito prerequisito)
+        public async Task<int> AddAsync(Prerequisitos prerequisito)
         {
             var sql = @"
                 INSERT INTO Prerequisitos (DisciplinaID, PreRequisitoID)

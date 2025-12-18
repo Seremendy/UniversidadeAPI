@@ -54,7 +54,7 @@ namespace UniversidadeAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var departamento = _mapper.Map<Departamento>(dto);
+            var departamento = _mapper.Map<Departamentos>(dto);
 
             var novoId = await _repository.AddAsync(departamento);
             departamento.DepartamentoID = novoId;

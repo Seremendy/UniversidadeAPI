@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface IMatriculaRepository : IGenericRepository<Matricula>
+    public interface IMatriculaRepository : IGenericRepository<Matriculas>
     {
     }
 }

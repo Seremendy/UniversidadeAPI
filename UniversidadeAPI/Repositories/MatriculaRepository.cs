@@ -4,11 +4,11 @@ using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
-    public class MatriculaRepository : GenericRepository<Matricula>, IMatriculaRepository
+    public class MatriculaRepository : GenericRepository<Matriculas>, IMatriculaRepository
     {
         public MatriculaRepository(IDbConnection dbConnection) : base(dbConnection)
         {
-            _tableName = "Matricula";
+            _tableName = "Matriculas";
         }
     }
 }

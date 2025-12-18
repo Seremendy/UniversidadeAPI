@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface ICursoRepository : IGenericRepository<Curso>
+    public interface ICursoRepository : IGenericRepository<Cursos>
     {
     }
 }

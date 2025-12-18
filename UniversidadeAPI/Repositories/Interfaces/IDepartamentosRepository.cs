@@ -5,13 +5,13 @@ namespace UniversidadeAPI.Repositories.Interfaces
     public interface IDepartamentoRepository
     {
 
-        Task<int> AddAsync(Departamento departamento);
+        Task<int> AddAsync(Departamentos departamento);
 
-        Task<IEnumerable<Departamento>> GetAllAsync();
+        Task<IEnumerable<Departamentos>> GetAllAsync();
 
-        Task<Departamento?> GetByIdAsync(int id);
+        Task<Departamentos?> GetByIdAsync(int id);
 
-        Task<bool> UpdateAsync(Departamento departamento);
+        Task<bool> UpdateAsync(Departamentos departamento);
 
         Task<bool> DeleteAsync(int id);
     }

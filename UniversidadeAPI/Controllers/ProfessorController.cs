@@ -28,7 +28,7 @@ namespace UniversidadeAPI.Controllers
             // Validação automática do DTO já ocorreu (ModelState)
 
             // Conversão DTO -> Entidade
-            var professorEntidade = _mapper.Map<Professor>(professorDto);
+            var professorEntidade = _mapper.Map<Professores>(professorDto);
 
             var novoId = await _professorRepository.AddAsync(professorEntidade);
             professorEntidade.ProfessorID = novoId;

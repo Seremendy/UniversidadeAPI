@@ -13,19 +13,19 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Horario>> GetAllAsync()
+        public async Task<IEnumerable<Horarios>> GetAllAsync()
         {
             var sql = "SELECT * FROM Horarios";
-            return await _dbConnection.QueryAsync<Horario>(sql);
+            return await _dbConnection.QueryAsync<Horarios>(sql);
         }
 
-        public async Task<Horario?> GetByIdAsync(int id)
+        public async Task<Horarios?> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Horarios WHERE HorarioID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<Horario>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<Horarios>(sql, new { Id = id });
         }
 
-        public async Task<int> AddAsync(Horario entity)
+        public async Task<int> AddAsync(Horarios entity)
         {
             var sql = @"
                 INSERT INTO Horarios (DiaSemana, HoraInicio, HoraFim)
@@ -40,7 +40,7 @@ namespace UniversidadeAPI.Repositories
             });
         }
 
-        public async Task<bool> UpdateAsync(Horario entity)
+        public async Task<bool> UpdateAsync(Horarios entity)
         {
             var sql = @"
                 UPDATE Horarios SET

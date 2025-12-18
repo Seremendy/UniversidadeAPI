@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class Nota
+    public class Notas
     {
         public int NotaID { get; set; }
 

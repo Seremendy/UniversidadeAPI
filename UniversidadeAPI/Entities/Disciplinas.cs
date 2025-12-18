@@ -2,11 +2,12 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class Prerequisito
+    public class Disciplinas
     {
         public int DisciplinaID { get; set; }
 
         [Required]
-        public int PreRequisitoID { get; set; }
+        [StringLength(100)]
+        public string NomeDisciplina { get; set; } = string.Empty;
     }
 }

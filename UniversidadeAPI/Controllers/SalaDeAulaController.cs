@@ -23,7 +23,7 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<SalaDeAulaResponseDto>> CreateSalaDeAula([FromBody] CreateSalaDeAulaRequestDto salaDto)
         {
-            var salaEntidade = new SalaDeAula
+            var salaEntidade = new SalasDeAula
             {
                 Capacidade = salaDto.Capacidade,
                 NumeroSala = salaDto.NumeroSala,
@@ -104,7 +104,7 @@ namespace UniversidadeAPI.Controllers
             return NoContent();
         }
 
-        private SalaDeAulaResponseDto MapToResponseDto(SalaDeAula sala)
+        private SalaDeAulaResponseDto MapToResponseDto(SalasDeAula sala)
         {
             return new SalaDeAulaResponseDto
             {

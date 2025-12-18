@@ -6,13 +6,13 @@ namespace UniversidadeAPI.Repositories.Interfaces
     public interface IPrerequisitoRepository
     {
         
-        Task<IEnumerable<Prerequisito>> GetAllAsync();
+        Task<IEnumerable<Prerequisitos>> GetAllAsync();
 
         
-        Task<IEnumerable<Prerequisito>> GetPrerequisitosParaDisciplinaAsync(int disciplinaId);
+        Task<IEnumerable<Prerequisitos>> GetPrerequisitosParaDisciplinaAsync(int disciplinaId);
 
         
-        Task<int> AddAsync(Prerequisito prerequisito);
+        Task<int> AddAsync(Prerequisitos prerequisito);
 
         
         Task<bool> DeleteAsync(int disciplinaId, int preRequisitoId);

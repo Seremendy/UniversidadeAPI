@@ -16,7 +16,7 @@ namespace UniversidadeAPI.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(Usuario usuario)
+        public string GenerateToken(Usuarios usuario)
         {
             var claims = new List<Claim>
             {

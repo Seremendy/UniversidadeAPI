@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface ISalaDeAulaRepository : IGenericRepository<SalaDeAula>
+    public interface ISalaDeAulaRepository : IGenericRepository<SalasDeAula>
     {
     }
 }

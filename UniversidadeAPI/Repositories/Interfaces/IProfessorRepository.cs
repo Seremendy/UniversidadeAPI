@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface IProfessorRepository : IGenericRepository<Professor>
+    public interface IProfessorRepository : IGenericRepository<Professores>
     {
     }
 }

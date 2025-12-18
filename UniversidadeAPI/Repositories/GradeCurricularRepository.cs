@@ -13,19 +13,19 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<GradeCurricular>> GetAllAsync()
+        public async Task<IEnumerable<GradeCurriculares>> GetAllAsync()
         {
             var sql = "SELECT * FROM GradeCurriculares";
-            return await _dbConnection.QueryAsync<GradeCurricular>(sql);
+            return await _dbConnection.QueryAsync<GradeCurriculares>(sql);
         }
 
-        public async Task<GradeCurricular?> GetByIdAsync(int id)
+        public async Task<GradeCurriculares?> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM GradeCurriculares WHERE GradeCurricularID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<GradeCurricular>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<GradeCurriculares>(sql, new { Id = id });
         }
 
-        public async Task<int> AddAsync(GradeCurricular entity)
+        public async Task<int> AddAsync(GradeCurriculares entity)
         {
             var sql = @"
                 INSERT INTO GradeCurriculares (DisciplinaID, CursoID)
@@ -35,7 +35,7 @@ namespace UniversidadeAPI.Repositories
             return await _dbConnection.ExecuteScalarAsync<int>(sql, entity);
         }
 
-        public async Task<bool> UpdateAsync(GradeCurricular entity)
+        public async Task<bool> UpdateAsync(GradeCurriculares entity)
         {
             var sql = @"
                 UPDATE GradeCurriculares SET
@@ -55,10 +55,10 @@ namespace UniversidadeAPI.Repositories
         }
 
 
-        public async Task<IEnumerable<GradeCurricular>> GetGradeByCursoIdAsync(int cursoId)
+        public async Task<IEnumerable<GradeCurriculares>> GetGradeByCursoIdAsync(int cursoId)
         {
             var sql = "SELECT * FROM GradeCurriculares WHERE CursoID = @CursoId";
-            return await _dbConnection.QueryAsync<GradeCurricular>(sql, new { CursoId = cursoId });
+            return await _dbConnection.QueryAsync<GradeCurriculares>(sql, new { CursoId = cursoId });
         }
     }
 }

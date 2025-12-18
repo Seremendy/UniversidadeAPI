@@ -4,7 +4,7 @@ namespace UniversidadeAPI.Services
 {
     public interface ITokenService
     {
-        string GenerateToken(Usuario usuarios);
+        string GenerateToken(Usuarios usuarios);
 
     }
 }

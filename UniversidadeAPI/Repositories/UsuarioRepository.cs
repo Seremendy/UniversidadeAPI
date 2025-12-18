@@ -13,13 +13,13 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<Usuario?> GetByLoginAsync(string login)
+        public async Task<Usuarios?> GetByLoginAsync(string login)
         {
             var sql = "SELECT UsuarioID, Login, SenhaHash, Role FROM Usuarios WHERE Login = @Login";
-            return await _dbConnection.QuerySingleOrDefaultAsync<Usuario>(sql, new { Login = login });
+            return await _dbConnection.QuerySingleOrDefaultAsync<Usuarios>(sql, new { Login = login });
         }
 
-        public async Task<int> AddAsync(Usuario usuario)
+        public async Task<int> AddAsync(Usuarios usuario)
         {
             var sql = @"
                 INSERT INTO Usuarios (Login, SenhaHash, Role)
@@ -36,11 +36,11 @@ namespace UniversidadeAPI.Repositories
 
         // --- Implementação dos novos métodos ---
 
-        public async Task<IEnumerable<Usuario>> GetAllAsync()
+        public async Task<IEnumerable<Usuarios>> GetAllAsync()
         {
             // Selecionamos apenas os dados seguros (sem a senha)
             var sql = "SELECT UsuarioID, Login, Role FROM Usuarios";
-            return await _dbConnection.QueryAsync<Usuario>(sql);
+            return await _dbConnection.QueryAsync<Usuarios>(sql);
         }
 
         public async Task<bool> DeleteAsync(int id)

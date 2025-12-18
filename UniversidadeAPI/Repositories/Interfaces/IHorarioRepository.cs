@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface IHorarioRepository : IGenericRepository<Horario>
+    public interface IHorarioRepository : IGenericRepository<Horarios>
     {
     }
 }

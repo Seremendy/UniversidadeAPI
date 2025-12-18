@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class SalaDeAula
+    public class SalasDeAula
     {
         public int SalaDeAulaID { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace UniversidadeAPI.Entities
 {
-    public class Departamento
+    public class Departamentos
     {
         public int DepartamentoID { get; set; }
 

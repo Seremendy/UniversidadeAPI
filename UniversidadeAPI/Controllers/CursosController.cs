@@ -29,7 +29,7 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = $"Departamento com ID {cursoDto.DepartamentoID} não encontrado." });
             }
 
-            var cursoEntidade = new Curso
+            var cursoEntidade = new Cursos
             {
                 NomeCurso = cursoDto.NomeCurso,
                 DepartamentoID = cursoDto.DepartamentoID

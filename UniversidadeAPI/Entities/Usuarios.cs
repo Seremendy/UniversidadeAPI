@@ -10,7 +10,7 @@ namespace UniversidadeAPI.Entities
         Aluno
     }
 
-    public class Usuario
+    public class Usuarios
     {
         public int UsuarioID { get; set; }
 

@@ -2,8 +2,8 @@
 
 namespace UniversidadeAPI.Repositories.Interfaces
 {
-    public interface ITurmaRepository : IGenericRepository<Turma>
+    public interface ITurmaRepository : IGenericRepository<Turmas>
     {
-        Task<IEnumerable<Turma>> GetTurmasBySalaIdAsync(int salaDeAulaId);
+        Task<IEnumerable<Turmas>> GetTurmasBySalaIdAsync(int salaDeAulaId);
     }
 }

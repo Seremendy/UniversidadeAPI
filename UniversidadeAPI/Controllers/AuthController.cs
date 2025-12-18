@@ -52,7 +52,7 @@ namespace UniversidadeAPI.Controllers // Garanta que o namespace está correto
                 return Conflict(new { Message = "Login já existe." });
             }
 
-            var usuario = new Usuario
+            var usuario = new Usuarios
             {
                 Login = dto.Login,
                 SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha),

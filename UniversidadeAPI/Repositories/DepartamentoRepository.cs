@@ -15,26 +15,26 @@ namespace UniversidadeAPI.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<Departamento?> GetByIdAsync(int id)
+        public async Task<Departamentos?> GetByIdAsync(int id)
         {
             var sql = "SELECT DepartamentoID, DepartamentoNome FROM Departamentos WHERE DepartamentoID = @Id";
-            return await _dbConnection.QuerySingleOrDefaultAsync<Departamento>(sql, new { Id = id });
+            return await _dbConnection.QuerySingleOrDefaultAsync<Departamentos>(sql, new { Id = id });
 
         }
 
-        public async Task<int> AddAsync(Departamento departamento)
+        public async Task<int> AddAsync(Departamentos departamento)
         { 
             var sql = "INSERT INTO Departamentos (DepartamentoNome) VALUES (@DepartamentoNome); SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(sql, departamento);
         }
 
-        public async Task<IEnumerable<Departamento>> GetAllAsync()
+        public async Task<IEnumerable<Departamentos>> GetAllAsync()
         {
             var sql = "SELECT DepartamentoID, DepartamentoNome FROM Departamentos";
-            return await _dbConnection.QueryAsync<Departamento>(sql);
+            return await _dbConnection.QueryAsync<Departamentos>(sql);
         }
 
-        public async Task<bool> UpdateAsync(Departamento departamento)
+        public async Task<bool> UpdateAsync(Departamentos departamento)
         {
             var sql = "UPDATE Departamentos SET DepartamentoNome = @DepartamentoNome WHERE DepartamentoID = @DepartamentoID";
             var rowsAffected = await _dbConnection.ExecuteAsync(sql, departamento);

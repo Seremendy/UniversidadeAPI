@@ -4,7 +4,7 @@ using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
-    public class CursoRepository : GenericRepository<Curso>, ICursoRepository
+    public class CursoRepository : GenericRepository<Cursos>, ICursoRepository
     {
         public CursoRepository(IDbConnection dbConnection) : base(dbConnection)
         {

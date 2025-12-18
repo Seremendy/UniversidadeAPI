@@ -37,7 +37,7 @@ namespace UniversidadeAPI.Controllers
 
             // 2. AutoMapper (Converte DTO -> Entidade)
             // Como já validamos acima, o AutoMapper não vai quebrar aqui.
-            var horarioEntidade = _mapper.Map<Horario>(horarioDto);
+            var horarioEntidade = _mapper.Map<Horarios>(horarioDto);
 
             var novoId = await _horarioRepository.AddAsync(horarioEntidade);
             horarioEntidade.HorarioID = novoId;

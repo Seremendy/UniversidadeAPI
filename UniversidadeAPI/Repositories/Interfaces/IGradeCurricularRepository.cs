@@ -3,8 +3,8 @@ using UniversidadeAPI.Repositories.Interfaces;
 namespace UniversidadeAPI.Repositories
 {
 
-    public interface IGradeCurricularRepository : IGenericRepository<GradeCurricular>
+    public interface IGradeCurricularRepository : IGenericRepository<GradeCurriculares>
     {
-        Task<IEnumerable<GradeCurricular>> GetGradeByCursoIdAsync(int cursoId);
+        Task<IEnumerable<GradeCurriculares>> GetGradeByCursoIdAsync(int cursoId);
     }
 }

@@ -48,7 +48,7 @@ namespace UniversidadeAPI.Controllers
             }
 
             // Conversão DTO -> Entidade
-            var prerequisitoEntidade = _mapper.Map<Prerequisito>(prerequisitoDto);
+            var prerequisitoEntidade = _mapper.Map<Prerequisitos>(prerequisitoDto);
 
             await _prerequisitoRepository.AddAsync(prerequisitoEntidade);
 

@@ -4,7 +4,7 @@ using UniversidadeAPI.Repositories.Interfaces;
 
 namespace UniversidadeAPI.Repositories
 {
-    public class DisciplinaRepository : GenericRepository<Disciplina>, IDisciplinaRepository
+    public class DisciplinaRepository : GenericRepository<Disciplinas>, IDisciplinaRepository
     {
         public DisciplinaRepository(IDbConnection dbConnection) : base(dbConnection)
         {

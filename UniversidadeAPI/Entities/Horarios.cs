@@ -10,7 +10,7 @@ namespace UniversidadeAPI.Entities
         Quinta,
         Sexta
     }
-    public class Horario
+    public class Horarios
     {
         public int HorarioID { get; set; }
 
