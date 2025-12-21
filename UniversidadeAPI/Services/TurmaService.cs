@@ -1,4 +1,4 @@
-﻿using AutoMapper; // <--- Importante
+﻿using AutoMapper;
 using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
 using UniversidadeAPI.Repositories.Interfaces;
@@ -13,7 +13,7 @@ namespace UniversidadeAPI.Services
         private readonly ISalaDeAulaRepository _salaDeAulaRepository;
         private readonly IProfessorRepository _professorRepository;
         private readonly IHorarioRepository _horarioRepository;
-        private readonly IMapper _mapper; // <--- Injetamos o AutoMapper
+        private readonly IMapper _mapper; 
 
         public TurmaService(
             ITurmaRepository turmaRepository,
@@ -21,7 +21,7 @@ namespace UniversidadeAPI.Services
             ISalaDeAulaRepository salaDeAulaRepository,
             IProfessorRepository professorRepository,
             IHorarioRepository horarioRepository,
-            IMapper mapper) // <--- Adicione no construtor
+            IMapper mapper)
         {
             _turmaRepository = turmaRepository;
             _disciplinaRepository = disciplinaRepository;
@@ -35,21 +35,17 @@ namespace UniversidadeAPI.Services
         {
             await ValidateForeignKeys(turmaDto.DisciplinaID, turmaDto.SalaDeAulaID, turmaDto.ProfessorID, turmaDto.HorarioID);
 
-            // ANTES: Mapeamento Manual (Várias linhas)
-            // AGORA: Uma linha mágica
             var turmaEntidade = _mapper.Map<Turmas>(turmaDto);
 
             var novoId = await _turmaRepository.AddAsync(turmaEntidade);
             turmaEntidade.TurmaID = novoId;
 
-            // Retorna DTO mapeado automaticamente
             return _mapper.Map<TurmaResponseDto>(turmaEntidade);
         }
 
         public async Task<IEnumerable<TurmaResponseDto>> GetAllTurmasAsync()
         {
             var turmas = await _turmaRepository.GetAllAsync();
-            // Converte a lista inteira de uma vez
             return _mapper.Map<IEnumerable<TurmaResponseDto>>(turmas);
         }
 

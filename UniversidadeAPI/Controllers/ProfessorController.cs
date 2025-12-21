@@ -13,7 +13,7 @@ namespace UniversidadeAPI.Controllers
     public class ProfessoresController : ControllerBase
     {
         private readonly IProfessorRepository _professorRepository;
-        private readonly IMapper _mapper; // Injeção do Mapper
+        private readonly IMapper _mapper;
 
         public ProfessoresController(IProfessorRepository professorRepository, IMapper mapper)
         {
@@ -25,15 +25,11 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProfessorResponseDto>> CreateProfessor([FromBody] CreateProfessorRequestDto professorDto)
         {
-            // Validação automática do DTO já ocorreu (ModelState)
-
-            // Conversão DTO -> Entidade
             var professorEntidade = _mapper.Map<Professores>(professorDto);
 
             var novoId = await _professorRepository.AddAsync(professorEntidade);
             professorEntidade.ProfessorID = novoId;
 
-            // Retorno (Entidade -> DTO)
             var professorResponse = _mapper.Map<ProfessorResponseDto>(professorEntidade);
 
             return CreatedAtAction(nameof(GetProfessorById), new { id = professorResponse.ProfessorID }, professorResponse);
@@ -72,10 +68,8 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Professor não encontrado." });
             }
 
-            // Atualiza os dados da entidade existente com o que veio do DTO
             _mapper.Map(professorDto, entidadeExistente);
 
-            // Garante que o ID não se perdeu
             entidadeExistente.ProfessorID = id;
 
             await _professorRepository.UpdateAsync(entidadeExistente);

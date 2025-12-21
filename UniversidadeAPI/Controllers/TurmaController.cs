@@ -12,7 +12,6 @@ namespace UniversidadeAPI.Controllers
     {
         private readonly ITurmaService _turmaService;
 
-        // Injetamos APENAS o serviço. O Controller não precisa conhecer os Repositórios!
         public TurmasController(ITurmaService turmaService)
         {
             _turmaService = turmaService;
@@ -29,7 +28,6 @@ namespace UniversidadeAPI.Controllers
             }
             catch (ArgumentException ex)
             {
-                // Captura os erros de validação lançados pelo serviço
                 return BadRequest(new { Message = ex.Message });
             }
         }

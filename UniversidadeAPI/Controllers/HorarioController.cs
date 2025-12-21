@@ -13,7 +13,7 @@ namespace UniversidadeAPI.Controllers
     public class HorarioController : ControllerBase
     {
         private readonly IHorarioRepository _horarioRepository;
-        private readonly IMapper _mapper; // Injeção do Mapper
+        private readonly IMapper _mapper; 
 
         public HorarioController(IHorarioRepository horarioRepository, IMapper mapper)
         {
@@ -25,8 +25,6 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<HorarioResponseDto>> CreateHorario([FromBody] CreateHorarioRequestDto horarioDto)
         {
-            // 1. CORREÇÃO DE SEGURANÇA (Evita Erro 500)
-            // Tenta converter a string para o Enum. Se falhar, avisa o usuário.
             if (!Enum.TryParse<DiaSemana>(horarioDto.DiaSemana, true, out _))
             {
                 return BadRequest(new
@@ -35,14 +33,12 @@ namespace UniversidadeAPI.Controllers
                 });
             }
 
-            // 2. AutoMapper (Converte DTO -> Entidade)
-            // Como já validamos acima, o AutoMapper não vai quebrar aqui.
+           
             var horarioEntidade = _mapper.Map<Horarios>(horarioDto);
 
             var novoId = await _horarioRepository.AddAsync(horarioEntidade);
             horarioEntidade.HorarioID = novoId;
 
-            // 3. Retorno Formatado
             var horarioResponse = _mapper.Map<HorarioResponseDto>(horarioEntidade);
 
             return CreatedAtAction(nameof(GetHorarioById), new { id = horarioResponse.HorarioID }, horarioResponse);

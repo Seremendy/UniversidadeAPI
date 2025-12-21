@@ -15,7 +15,7 @@ namespace UniversidadeAPI.Controllers
         private readonly IMatriculaRepository _matriculaRepository;
         private readonly IAlunoRepository _alunoRepository;
         private readonly ICursoRepository _cursoRepository;
-        private readonly IMapper _mapper; // Injeção do Mapper
+        private readonly IMapper _mapper; 
 
         public MatriculasController(
             IMatriculaRepository matriculaRepository,
@@ -33,29 +33,24 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<MatriculaResponseDto>> CreateMatricula([FromBody] CreateMatriculaRequestDto matriculaDto)
         {
-            // Validação 1: Aluno existe?
             if (await _alunoRepository.GetByIdAsync(matriculaDto.AlunoID) == null)
             {
                 return NotFound(new { Message = $"Aluno com ID {matriculaDto.AlunoID} não encontrado." });
             }
 
-            // Validação 2: Curso existe?
             if (await _cursoRepository.GetByIdAsync(matriculaDto.CursoID) == null)
             {
                 return NotFound(new { Message = $"Curso com ID {matriculaDto.CursoID} não encontrado." });
             }
 
-            // Conversão DTO -> Entidade
             var matriculaEntidade = _mapper.Map<Matriculas>(matriculaDto);
 
-            // Regras de negócio adicionais (que não vêm do DTO)
             matriculaEntidade.DataMatricula = DateTime.UtcNow;
             matriculaEntidade.MatriculaAtiva = true;
 
             var novoId = await _matriculaRepository.AddAsync(matriculaEntidade);
             matriculaEntidade.MatriculaID = novoId;
 
-            // Retorno formatado
             var matriculaResponse = _mapper.Map<MatriculaResponseDto>(matriculaEntidade);
 
             return CreatedAtAction(nameof(GetMatriculaById), new { id = matriculaResponse.MatriculaID }, matriculaResponse);

@@ -13,7 +13,7 @@ namespace UniversidadeAPI.Controllers
     public class DepartamentosController : ControllerBase
     {
         private readonly IDepartamentoRepository _repository;
-        private readonly IMapper _mapper; // Injeção do AutoMapper
+        private readonly IMapper _mapper;
 
         public DepartamentosController(IDepartamentoRepository repository, IMapper mapper)
         {
@@ -26,7 +26,6 @@ namespace UniversidadeAPI.Controllers
         {
             var departamentos = await _repository.GetAllAsync();
 
-            // Converte a lista de Entidades para lista de DTOs
             var departamentosDto = _mapper.Map<IEnumerable<DepartamentoDtos>>(departamentos);
 
             return Ok(departamentosDto);
@@ -42,7 +41,6 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Departamento não encontrado." });
             }
 
-            // Converte Entidade -> DTO
             var departamentoDto = _mapper.Map<DepartamentoDtos>(departamento);
 
             return Ok(departamentoDto);

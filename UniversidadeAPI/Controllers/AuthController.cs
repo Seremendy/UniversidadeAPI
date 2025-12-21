@@ -72,10 +72,9 @@ namespace UniversidadeAPI.Controllers // Garanta que o namespace está correto
             return StatusCode(201, responseDto);
         }
 
-        // --- NOVOS ENDPOINTS ---
 
-        [HttpGet] // GET: api/Auth
-        [Authorize(Roles = "Admin")] // Só Admin pode ver a lista
+        [HttpGet] 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<UsuarioResponseDto>>> GetAllUsers()
         {
             var usuarios = await _usuarioRepository.GetAllAsync();
@@ -90,7 +89,7 @@ namespace UniversidadeAPI.Controllers // Garanta que o namespace está correto
             return Ok(response);
         }
 
-        [HttpDelete("{id}")] // DELETE: api/Auth/5
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(int id)
         {

@@ -16,7 +16,7 @@ namespace UniversidadeAPI.Controllers
         private readonly IGradeCurricularRepository _gradeRepository;
         private readonly IDisciplinaRepository _disciplinaRepository;
         private readonly ICursoRepository _cursoRepository;
-        private readonly IMapper _mapper; // Injeção do Mapper
+        private readonly IMapper _mapper;
 
         public GradeCurricularController(
             IGradeCurricularRepository gradeRepository,
@@ -34,25 +34,21 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<GradeCurricularResponseDto>> CreateGrade([FromBody] CreateGradeRequestDto gradeDto)
         {
-            // Validação 1: Disciplina existe?
             if (await _disciplinaRepository.GetByIdAsync(gradeDto.DisciplinaID) == null)
             {
                 return NotFound(new { Message = $"Disciplina com ID {gradeDto.DisciplinaID} não encontrada." });
             }
 
-            // Validação 2: Curso existe?
             if (await _cursoRepository.GetByIdAsync(gradeDto.CursoID) == null)
             {
                 return NotFound(new { Message = $"Curso com ID {gradeDto.CursoID} não encontrado." });
             }
 
-            // Conversão automática (DTO -> Entidade)
             var gradeEntidade = _mapper.Map<GradeCurriculares>(gradeDto);
 
             var novoId = await _gradeRepository.AddAsync(gradeEntidade);
             gradeEntidade.GradeCurricularID = novoId;
 
-            // Retorno formatado (Entidade -> DTO)
             var gradeResponse = _mapper.Map<GradeCurricularResponseDto>(gradeEntidade);
 
             return CreatedAtAction(nameof(GetGradeById), new { id = gradeResponse.GradeCurricularID }, gradeResponse);
@@ -77,7 +73,6 @@ namespace UniversidadeAPI.Controllers
         {
             var gradesEntidades = await _gradeRepository.GetAllAsync();
 
-            // Conversão de Lista automática
             var gradesResponse = _mapper.Map<IEnumerable<GradeCurricularResponseDto>>(gradesEntidades);
 
             return Ok(gradesResponse);

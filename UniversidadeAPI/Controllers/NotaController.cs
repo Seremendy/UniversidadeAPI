@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims; // Necessário para ler o Token
+using System.Security.Claims;
 using UniversidadeAPI.DTOs;
 using UniversidadeAPI.Entities;
 using UniversidadeAPI.Repositories.Interfaces;
@@ -39,7 +39,6 @@ namespace UniversidadeAPI.Controllers
 
             var userIdClaim = User.FindFirst("id")?.Value;
 
-            // Se for Aluno, ele SÓ pode ver as próprias notas
             if (role == "Aluno" && userIdClaim != null)
             {
                 if (int.Parse(userIdClaim) != alunoId)
@@ -76,7 +75,7 @@ namespace UniversidadeAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Professor")] // Alunos não podem ver TODAS as notas
+        [Authorize(Roles = "Admin, Professor")] 
         public async Task<ActionResult<IEnumerable<NotaResponseDto>>> GetAllNotas()
         {
             var notasEntidades = await _notaRepository.GetAllAsync();
@@ -88,7 +87,6 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin, Professor")]
         public async Task<ActionResult<NotaResponseDto>> CreateNota([FromBody] CreateNotaRequestDto notaDto)
         {
-            // 1. Validação de Existência (Já existia)
             if (await _alunoRepository.GetByIdAsync(notaDto.AlunoID) == null)
             {
                 return NotFound(new { Message = $"Aluno com ID {notaDto.AlunoID} não encontrado." });
@@ -101,7 +99,6 @@ namespace UniversidadeAPI.Controllers
 
             var notasDoAluno = await _notaRepository.GetNotasPorAlunoAsync(notaDto.AlunoID);
 
-            // Verificamos se alguma delas é da mesma disciplina que estamos tentando salvar
             if (notasDoAluno.Any(n => n.DisciplinaID == notaDto.DisciplinaID))
             {
                 return BadRequest(new { Message = "Este aluno já possui uma nota lançada para esta disciplina. Use a edição para alterar a nota." });
@@ -127,7 +124,6 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = "Nota não encontrada." });
             }
 
-            // Atualiza apenas o valor da nota (AlunoID e DisciplinaID não mudam na edição)
             _mapper.Map(notaDto, entidadeExistente);
 
             await _notaRepository.UpdateAsync(entidadeExistente);

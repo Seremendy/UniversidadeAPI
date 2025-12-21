@@ -30,13 +30,11 @@ namespace UniversidadeAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PrerequisitoResponseDto>> CreatePrerequisito([FromBody] CreatePrerequisitoRequestDto prerequisitoDto)
         {
-            // Validação de Negócio: Dependência Circular Simples
             if (prerequisitoDto.DisciplinaID == prerequisitoDto.PreRequisitoID)
             {
                 return BadRequest(new { Message = "Uma disciplina não pode ser pré-requisito de si mesma." });
             }
 
-            // Validação de Integridade
             if (await _disciplinaRepository.GetByIdAsync(prerequisitoDto.DisciplinaID) == null)
             {
                 return NotFound(new { Message = $"Disciplina principal com ID {prerequisitoDto.DisciplinaID} não encontrada." });
@@ -47,12 +45,10 @@ namespace UniversidadeAPI.Controllers
                 return NotFound(new { Message = $"Disciplina pré-requisito com ID {prerequisitoDto.PreRequisitoID} não encontrada." });
             }
 
-            // Conversão DTO -> Entidade
             var prerequisitoEntidade = _mapper.Map<Prerequisitos>(prerequisitoDto);
 
             await _prerequisitoRepository.AddAsync(prerequisitoEntidade);
 
-            // Retorno
             var response = _mapper.Map<PrerequisitoResponseDto>(prerequisitoEntidade);
 
             return StatusCode(201, response);
